@@ -26,6 +26,14 @@ type Annotation struct {
 	L    uint
 }
 
+func MakeGenType[T any](v T, annotation *Annotation) (GenSSZType[T], error) {
+	t, err := MakeType(v, annotation)
+	if err != nil {
+		return GenSSZType[T]{}, err
+	}
+	return NewGenSSZType[T](t)
+}
+
 func MakeType(v interface{}, annotation *Annotation) (SSZType, error) {
 	vv := reflect.ValueOf(v)
 	if vv.Kind() == reflect.Ptr {
